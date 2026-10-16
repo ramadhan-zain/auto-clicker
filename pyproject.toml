@@ -1,0 +1,37 @@
+[project]
+name = "autoclick"
+version = "0.1.0"
+description = "macOS auto clicker and key presser, mainly to avoid the Roblox idle kick"
+readme = "README.md"
+authors = [
+    { name = "zain", email = "rbuma8426@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pyobjc-framework-applicationservices>=12.2.2",
+    "pyobjc-framework-cocoa>=12.2.2",
+    "pyobjc-framework-quartz>=12.2.2",
+]
+
+[project.scripts]
+autoclick = "autoclick.__main__:main"
+
+[build-system]
+requires = ["uv_build>=0.12.15,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.17.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
