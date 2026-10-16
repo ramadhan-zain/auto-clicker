@@ -39,6 +39,32 @@ Both permissions belong to the app that launches Python (your terminal): System 
 Privacy & Security → Accessibility, and → Input Monitoring. Quit and reopen the terminal
 after granting them.
 
+## Building and releasing
+
+`make build` writes `dist/AutoClick.app` (ad-hoc signed, Apple Silicon) and
+`dist/AutoClick-macos-arm64.zip`.
+
+To publish a release, bump `version` in `pyproject.toml` and `src/autoclick/__init__.py`,
+commit, then push a matching tag:
+
+```sh
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The Release workflow checks the tag matches the version, runs `make check`, builds the app
+and attaches the zip to a GitHub release. Running the workflow by hand from the Actions tab
+builds the zip as a workflow artifact without releasing.
+
+The app is not notarized, so macOS blocks it after download. Clear the quarantine flag once:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/AutoClick.app
+```
+
+Each build has a new ad-hoc signature, so after updating, remove AutoClick from
+Accessibility and Input Monitoring in System Settings and add it again.
+
 ## Input spike (M1)
 
 ```sh

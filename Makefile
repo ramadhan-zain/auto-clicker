@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help install run test lint format check spike-check spike-basic spike-timing spike-soak clean
+.PHONY: help install run test lint format check build spike-check spike-basic spike-timing spike-soak clean
 
 SPIKE := uv run python scripts/spike_input.py
 
@@ -24,6 +24,12 @@ format: ## Fix lint issues and reformat
 	uv run ruff format .
 
 check: lint test ## Lint, then test
+
+build: ## Build dist/AutoClick.app (ad-hoc signed) and dist/AutoClick-macos-arm64.zip
+	rm -rf build dist
+	uv run pyinstaller --noconfirm AutoClick.spec
+	codesign --verify --deep --strict dist/AutoClick.app
+	ditto -c -k --keepParent dist/AutoClick.app dist/AutoClick-macos-arm64.zip
 
 spike-check: ## Show Accessibility permission and focus state
 	$(SPIKE) check
